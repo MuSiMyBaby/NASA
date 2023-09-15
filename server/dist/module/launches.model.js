@@ -8,7 +8,7 @@ const launch = {
     mission: "Kepler Exploration X",
     rocket: "Explorer IS1",
     launchDate: new Date("December 27 , 2030"),
-    target: "Kepler-442 b",
+    target: "Kepler-1652 b",
     upcoming: true,
     success: true, // server side decides
 };
@@ -25,14 +25,16 @@ async function getAllLaunches() {
     });
 }
 async function saveLaunch(launch) {
+    const planet = await planets.findOne({
+        keplerName: launch.target,
+    });
+    if (!planet) {
+        throw new Error("No matching planet found!");
+    }
     try {
-        console.log(await planets.findOne({
-            keplerName: launch.target,
-        }));
         await launchesDB.updateOne({
             flightNumber: launch.flightNumber,
         }, launch, { upsert: true });
-        console.log(launchesDB.length);
     }
     catch (err) {
         console.error(err);
@@ -48,7 +50,6 @@ function addNewLaunches(launch) {
     }));
 }
 function existLaunchWithId(launchId) {
-    console.log(launches);
     return launches.has(launchId);
 }
 function abortLaunchById(launchId) {
