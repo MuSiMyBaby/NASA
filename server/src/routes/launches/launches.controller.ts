@@ -1,6 +1,6 @@
 import {
   getAllLaunches,
-  addNewLaunches,
+  scheduleNewLaunch,
   existLaunchWithId,
   abortLaunchById,
 } from "../../module/launches.model.js";
@@ -9,7 +9,7 @@ async function httpGetAllLaunches(req: any, res: any) {
   return res.status(200).json(await getAllLaunches());
 }
 
-function httpAddNewLaunches(req: any, res: any): any {
+async function httpAddNewLaunches(req: any, res: any) {
   const launch = req.body;
   if (
     !launch.mission ||
@@ -31,19 +31,27 @@ function httpAddNewLaunches(req: any, res: any): any {
       error: "Invalid Date",
     });
   }
-  addNewLaunches(launch);
+  await scheduleNewLaunch(launch);
   return res.status(201).json(launch);
 }
 
-function httpAbortLaunches(req: any, res: any): any {
+async function httpAbortLaunches(req: any, res: any) {
   const launchId = Number(req.params.id); // Number(req.params.id);
-  if (!existLaunchWithId(launchId)) {
+  const existLaunch = await existLaunchWithId(launchId);
+  if (!existLaunch) {
     return res.status(404).json({
       err: "Launch not found",
     });
   }
   const aborted = abortLaunchById(launchId);
-  return res.status(200).json(aborted);
+  if (!aborted) {
+    return res.status(400).json({
+      error: "Launch not aborted",
+    });
+  }
+  return res.status(200).json({
+    ok: true,
+  });
 }
 
 export { httpGetAllLaunches, httpAddNewLaunches, httpAbortLaunches };

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Rotation Schedule</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        color: #fff;
+        font-size: 20px;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 20px;
+      }
+
+      div {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      table {
+        width: 100%;
+        margin: auto;
+        border-collapse: collapse;
+        background-color: white;
+        font-size: 20px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        font-size: 20px;
+        text-align: center;
+        border: 1px solid black;
+        color: black;
+      }
+
+      th {
+        font-size: 20px;
+        background-color: goldenrod;
+        color: black;
+      }
+
+      td {
+        font-size: 20px;
+        background-color: white;
+        color: black;
+      }
+
+      button {
+        background-color: #fff;
+        color: #0098ff;
+        font-size: 18px;
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #33adff;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>接待輪值表</h2>
+    <div>
+      <label for="numHR">輸入輪值人員數量: </label>
+      <input type="number" id="numHR" min="1" />
+      <button onclick="generateSchedule()">產生輪值表</button>
+    </div>
+
+    <table border="1" id="scheduleTable" style="margin-top: 20px">
+      <thead>
+        <tr>
+          <th rowspan="2">週</th>
+          <th rowspan="2">角色</th>
+          <th colspan="5">日期</th>
+        </tr>
+        <tr>
+          <th>星期一</th>
+          <th>星期二</th>
+          <th>星期三</th>
+          <th>星期四</th>
+          <th>星期五</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Rows will be dynamically generated -->
+      </tbody>
+    </table>
+
+    <script>
+      function generateSchedule() {
+        const numHR = parseInt(document.getElementById("numHR").value);
+        if (isNaN(numHR) || numHR < 1) {
+          alert("請輸入有效數字");
+          return;
+        }
+
+        const tbody = document.querySelector("#scheduleTable tbody");
+        tbody.innerHTML = ""; // Clear existing rows
+
+        for (let week = 1; week <= 4; week++) {
+          // For 4 weeks
+          // Generate HR List
+          const hrList = Array.from({ length: numHR }, (_, i) => i + 1);
+          const shuffledList = [...hrList].sort(() => Math.random() - 0.5);
+
+          const primarySchedule = [];
+          const backupSchedule = [];
+
+          for (let i = 0; i < 5; i++) {
+            primarySchedule.push(shuffledList[i % shuffledList.length]);
+            backupSchedule.push(shuffledList[(i + 1) % shuffledList.length]);
+          }
+
+          // Create and populate Primary Row
+          const primaryRow = document.createElement("tr");
+          const primaryWeekTD = document.createElement("td");
+          primaryWeekTD.rowSpan = 2;
+          primaryWeekTD.textContent = "週 " + week;
+          const primaryRoleTD = document.createElement("td");
+          primaryRoleTD.textContent = "主要";
+          primaryRow.appendChild(primaryWeekTD);
+          primaryRow.appendChild(primaryRoleTD);
+          for (const num of primarySchedule) {
+            const td = document.createElement("td");
+            td.textContent = num;
+            primaryRow.appendChild(td);
+          }
+          tbody.appendChild(primaryRow);
+
+          // Create and populate Backup Row
+          const backupRow = document.createElement("tr");
+          const backupRoleTD = document.createElement("td");
+          backupRoleTD.textContent = "次要";
+          backupRow.appendChild(backupRoleTD);
+          for (const num of backupSchedule) {
+            const td = document.createElement("td");
+            td.textContent = num;
+            backupRow.appendChild(td);
+          }
+          tbody.appendChild(backupRow);
+        }
+      }
+    </script>
+  </body>
+</html>
