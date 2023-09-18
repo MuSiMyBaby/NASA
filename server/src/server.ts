@@ -1,5 +1,5 @@
 import http from "http";
-import { app } from "./app.js";
+import app from "./app.js";
 import { loadPlanetsDate } from "./module/planets.model.js";
 import mongoose from "mongoose";
 
