@@ -4,9 +4,12 @@ import {
   existLaunchWithId,
   abortLaunchById,
 } from "../../module/launches.model.js";
+import getPagination from "../../Utilities/query.js";
 
 async function httpGetAllLaunches(req: any, res: any) {
-  return res.status(200).json(await getAllLaunches());
+  const { skip, limit } = getPagination(req.query);
+  const launches = await getAllLaunches(skip, limit);
+  return res.status(200).json(launches);
 }
 
 async function httpAddNewLaunches(req: any, res: any) {
@@ -31,7 +34,11 @@ async function httpAddNewLaunches(req: any, res: any) {
       error: "Invalid Date",
     });
   }
-  await scheduleNewLaunch(launch);
+  try {
+    await scheduleNewLaunch(launch);
+  } catch {
+    console.log("failed");
+  }
   return res.status(201).json(launch);
 }
 

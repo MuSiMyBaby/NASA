@@ -1,10 +1,9 @@
 import express from "express";
-import { planetsRouter } from "./routes/planets/planets.router.js";
-import { launchesRouter } from "./routes/launches/launches.router.js";
 import cors from "cors";
 import url from "url";
 import path from "path";
 import morgan from "morgan";
+import api from "./routes/api.js";
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const index_url = path.join(__dirname, "..", "public", "index.html");
@@ -18,8 +17,9 @@ app.use(cors(corsOptions));
 app.use(morgan("common"));
 app.use(express.json()); // check ContentType;
 app.use(express.static(path.join(__dirname, "..", "public")));
-app.use("/planets", planetsRouter); // go through router;
-app.use("/launches", launchesRouter); // go through router;
+app.use("/v1", api);
+/* app.use("/v2", v2Api);
+ */
 app.get("/*", (req, res) => {
     //* regexp
     res.sendFile(index_url);

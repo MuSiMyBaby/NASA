@@ -26,6 +26,7 @@ async function loadPlanetsDate() {
             if (await isHabitablePlanets(chunk)) {
                 // await console.log(chunk.kepler_name);
                 await savePlanet(chunk); // Note the await here
+                console.log(`Planet ${chunk.kepler_name} saved.`);
             }
         }
         const countPlanetsFound = (await getHabitablePlanets()).length;
@@ -35,6 +36,11 @@ async function loadPlanetsDate() {
         console.error(`An error occurred: ${error}`);
         throw error;
     }
+}
+async function getHabitablePlanets() {
+    const foundPlanets = await planets.find({});
+    //console.log(foundPlanets); // make should it's right.
+    return foundPlanets;
 }
 /*
 async function loadPlanetsDate() {
@@ -67,10 +73,5 @@ async function savePlanet(planet) {
     catch (err) {
         console.error(`Could not save planet ${err}`);
     }
-}
-async function getHabitablePlanets() {
-    const foundPlanets = await planets.find({});
-    //console.log(foundPlanets); // make should it's right.
-    return foundPlanets;
 }
 export { loadPlanetsDate, getHabitablePlanets };
