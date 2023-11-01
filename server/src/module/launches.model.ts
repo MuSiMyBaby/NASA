@@ -112,7 +112,7 @@ async function saveLaunch(launch: flightList) {
       { upsert: true },
     );
   } catch (err) {
-    console.error(err);
+    +console.error(err);
   }
 }
 async function getLatestFlightNumber() {
