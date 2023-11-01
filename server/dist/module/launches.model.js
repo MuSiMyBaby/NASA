@@ -89,7 +89,7 @@ async function saveLaunch(launch) {
         }, launch, { upsert: true });
     }
     catch (err) {
-        console.error(err);
+        +console.error(err);
     }
 }
 async function getLatestFlightNumber() {

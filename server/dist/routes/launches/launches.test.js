@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config();
-const MONGO_URL = process.env.MONGO_URL;
+export {};
+/* dotenv.config();
+const MONGO_URL = process.env.MONGO_URL; */
 //xWnK0EhcyZekcQeJ
 /* describe("Launches API", () => {
   beforeAll(async () => {
