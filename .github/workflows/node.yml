@@ -20,8 +20,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{matrix.node-version}}
-      - name: Use MongoDB from Github Actions
-        uses: suprtcharge/mongodb-github-action@1.6.0
+      - name: MongoDB in GitHub Actions
+        uses: supercharge/mongodb-github-action@1.10.0
       - run: npm install
       - run: npm run build --prefix client
       - run: npm test
